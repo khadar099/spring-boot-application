@@ -1,21 +1,22 @@
-package com.javatechie;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@SpringBootApplication
 @RestController
-public class DevopsIntegrationApplication {
+@RequestMapping("/api/products")
+public class ProductController {
 
-	@GetMapping
-	public String message(){
-		return "welcome to javatechie";
-	}
+    @Autowired
+    private ProductRepository productRepository;
 
-	public static void main(String[] args) {
-		SpringApplication.run(DevopsIntegrationApplication.class, args);
-	}
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
 
+    @PostMapping
+    public Product addProduct(@RequestBody Product product) {
+        return productRepository.save(product);
+    }
+
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable Long id) {
+        return productRepository.findById(id).orElse(null);
+    }
 }
